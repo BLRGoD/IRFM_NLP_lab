@@ -1,44 +1,18 @@
 import spacy
 from spacypdfreader.spacypdfreader import pdf_reader
 from itertools import groupby
+from text_processing_methods import preprocess_text, generate_index
+# from spell_checker import check_spelling
 
 nlp = spacy.load('ru_core_news_lg')
-doc = pdf_reader('met_recommendations-1-10.pdf', nlp)
-
-
-def preprocess_text(doc):
-    cleaned_tokens = []
-    for token in doc:
-        if not token.is_space and not token.is_punct and not token.like_num and not token.is_title:
-            cleaned_tokens.append(token.lemma_.lower())
-        # if token.is_title:
-        #     cleaned_tokens.append(token.text)
-    return cleaned_tokens
-
-def generate_index(doc, words_list):
-    index = {}
-    line_number = 0
-    page_number = 1
-
-    for i in range(len(doc)):
-        word_from_original = str(doc[i].lemma_.lower())
-        if word_from_original in words_list and word_from_original not in index:
-            index[word_from_original] = {'номер страницы: ': page_number, 'номер строки: ': line_number}
-        
-        if '\n' in str(doc[i]):
-            line_number += 1
-
-        if page_number != doc[i]._.page_number:
-            line_number = 1
-            page_number = doc[i]._.page_number
-
-    return index
+doc = pdf_reader('met_recommendations-1-15.pdf', nlp)
 
 
 cleaned_text = preprocess_text(doc)
 
 word_usage = [[key, len(list(group))] for key, group in groupby(sorted(cleaned_text))]
-sorted_word_usage = sorted(word_usage,  reverse=True, key=lambda x: x[1]) 
+
+sorted_word_usage = sorted(word_usage,  reverse=True, key=lambda x: x[1])
 
 main_words_usage = sorted_word_usage[0:100]
 
@@ -46,7 +20,9 @@ main_words = [i[0] for i in main_words_usage]
 
 # print(doc[2])
 # print(ord('\n'))
-print(generate_index(doc, main_words))
+x = generate_index(doc, main_words)
+print(x)
+print(main_words_usage)
 # print(doc._.page(1))
 
 
