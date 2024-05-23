@@ -1,6 +1,4 @@
 
-
-
 def preprocess_text(doc):
     cleaned_tokens = []
     for token in doc:
@@ -26,5 +24,4 @@ def generate_index(doc, words_list):
         if page_number != doc[i]._.page_number:
             line_number = 1
             page_number = doc[i]._.page_number
-
     return index

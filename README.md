@@ -5,3 +5,4 @@
 <p>pip install -U spacy-cleaner</p>
 <p>pip install spacypdfreader</p>
 <p>pip install pyspellchecker</p>
+<p>pip install aspose-pdf</p>
